@@ -90,20 +90,21 @@ class Product
         return $products;
     }
 
-    public function addProduct(): bool
+    public function addProduct(): string
     {
         $db = getDBConnection();
+        $uuid = $db->query("SELECT UUID() as uuid")->fetch_assoc()['uuid'];
         $stmt = $db->prepare(
-            "INSERT INTO products(name, description, stock, price) VALUES (?, ?, ?, ?)"
+            "INSERT INTO products(id, name, description, stock, price) VALUES (?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("ssis", $this->name, $this->description, $this->stock, $this->price);
+        $stmt->bind_param("sssis", $uuid, $this->name, $this->description, $this->stock, $this->price);
 
         if ($stmt->execute()) {
             $stmt->close();
-            return true;
+            return $uuid;
         } else {
             error_log("Error: " . $stmt->error);
-            $db->close();
+            $stmt->close();
             return false;
         }
     }

@@ -10,7 +10,7 @@
 <div class="container">
     <div class="card mt-3">
         <div class="card-header fs-4">Crear Producto</div>
-        <form action="/create" method="post">
+        <form action="/create" method="post" enctype="multipart/form-data">
             <div class="card-body d-flex flex-column row-gap-2">
                 <div>
                     <label for="name" class="form-label">Nombre</label>
@@ -30,8 +30,8 @@
                     <input name="price" id="price" type="text" class="form-control" aria-label="Precio" required>
                 </div>
                 <div>
-                    <label for="images" class="form-label">Imágenes</label>
-                    <input name="images" id="images" type="file" class="form-control" aria-label="Imágenes">
+                    <label for="image" class="form-label">Imágen</label>
+                    <input name="image" id="image" type="file" accept="image/*" class="form-control" aria-label="Imágen" required>
                 </div>
             </div>
             <div class="card-footer d-flex flex-column row-gap-1">

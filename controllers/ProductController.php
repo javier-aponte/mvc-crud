@@ -3,8 +3,10 @@
 namespace controllers;
 
 use \models\Product;
+use \models\Image;
 
 require '../models/Product.php';
+require '../models/Image.php';
 
 class ProductController
 {
@@ -27,13 +29,33 @@ class ProductController
         $stock = (int)$_POST['stock'] ?? 0;
         $price = (double)$_POST['price'] ?? 0.00;
 
+        $target_dir = "uploads/";
+        $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+        $imageName = uniqid() . '.' . $imageFileType;
+        $target_file = $target_dir . $imageName;
+
+        $check = getimagesize($_FILES["image"]["tmp_name"]);
+
+        if ($check !== false) {
+            move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+        }
+
         $product = new Product();
         $product->setName($name);
         $product->setDescription($description);
         $product->setStock($stock);
         $product->setPrice($price);
 
-        if ($product->addProduct()) {
+        $product_result = $product->addProduct();
+
+        $image = new Image();
+        $image->setPath($target_file);
+        $image->setName($imageName);
+        $image->setProductId($product_result);
+
+        $image_result = $image->AddImage();
+
+        if ($product_result && $image_result) {
             header('Location: /');
             exit;
         } else {

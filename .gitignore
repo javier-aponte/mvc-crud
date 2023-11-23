@@ -1,0 +1,5 @@
+Dockerfile
+.dockerignore
+docker-compose.yml
+myapp.conf
+.DS_Store
