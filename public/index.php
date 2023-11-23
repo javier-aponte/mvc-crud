@@ -1,5 +1,8 @@
 <?php
-require "../controllers/ProductController.php";
+
+use controllers\ProductController;
+
+require '../controllers/ProductController.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
@@ -17,7 +20,7 @@ switch ($request) {
       $controller->store();
     }
     break;
-  case (preg_match('/\/edit\/(\d+)/', $request, $matches) ? true : false):
+  case (bool)preg_match('/\/edit\/(\d+)/', $request, $matches):
     $id = $matches[1];
     if ($method == 'GET') {
       $controller->edit($id);

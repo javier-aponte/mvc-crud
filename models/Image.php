@@ -1,4 +1,6 @@
 <?php
+namespace models;
+
 class Image
 {
   private string $id;
