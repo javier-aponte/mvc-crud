@@ -9,7 +9,6 @@ class Product
     private string $id;
     private string $name;
     private string $description;
-    private array $images;
     private int $stock;
     private float $price;
 
@@ -32,11 +31,6 @@ class Product
         return $this->description;
     }
 
-    public function getImage(): array
-    {
-        return $this->images;
-    }
-
     public function getStock(): int
     {
         return $this->stock;
@@ -47,6 +41,11 @@ class Product
         return $this->price;
     }
 
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -55,11 +54,6 @@ class Product
     public function setDescription(string $description): void
     {
         $this->description = $description;
-    }
-
-    public function AddImage(Image $image): void
-    {
-        $this->images[] = $image;
     }
 
     public function setStock(int $stock): void
@@ -76,7 +70,7 @@ class Product
     {
         $db = getDBConnection();
         $result = $db->query(
-            "SELECT id, name, description, stock, price FROM products ORDER BY  created_at DESC"
+            "SELECT id, name, description, stock, price FROM products ORDER BY created_at DESC"
         );
         $products = [];
 
@@ -85,9 +79,38 @@ class Product
                 $products[] = $row;
             }
             $result->free();
-            $db->close();
         }
         return $products;
+    }
+
+    public function getProduct(string $uuid): ?array
+    {
+        $db = getDBConnection();
+        $stmt = $db->prepare(
+            "SELECT id, name, description, stock, price FROM products WHERE id = ?"
+        );
+        $stmt->bind_param("s", $uuid);
+
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            //$product = new Product();
+            $product = $result->fetch_assoc();
+
+            /*while ($row = $result->fetch_assoc()) {
+                $product->setId($row['id']);
+                $product->setName($row['name']);
+                $product->setDescription($row['description']);
+                $product->setStock($row['stock']);
+                $product->setPrice($row['price']);
+            }*/
+
+            $stmt->close();
+            return $product;
+        } else {
+            error_log("Error: " . $stmt->error);
+            $stmt->close();
+            return null;
+        }
     }
 
     public function addProduct(): string
@@ -105,6 +128,22 @@ class Product
         } else {
             error_log("Error: " . $stmt->error);
             $stmt->close();
+            return false;
+        }
+    }
+
+    public function updateProduct(): bool
+    {
+        $db = getDBConnection();
+        $stmt = $db->prepare(
+            "UPDATE products SET name = ?, description = ?, stock = ?, price = ? WHERE id = ?"
+        );
+        $stmt->bind_param("ssiss", $this->name, $this->description, $this->stock, $this->price, $this->id);
+        $result = $stmt->execute();
+        $stmt->close();
+        if ($result) {
+            return true;
+        } else {
             return false;
         }
     }

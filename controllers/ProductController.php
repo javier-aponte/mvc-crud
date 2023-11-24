@@ -10,10 +10,19 @@ require '../models/Image.php';
 
 class ProductController
 {
+    private Product $productModel;
+    private Image $imageModel;
+
+    public function __construct()
+    {
+        $this->productModel = new Product();
+        $this->imageModel = new Image();
+    }
+
+
     public function list(): void
     {
-        $products = new Product();
-        $products = $products->getProducts();
+        $products = $this->productModel->getProducts();
         include '../views/list.php';
     }
 
@@ -65,11 +74,32 @@ class ProductController
 
     public function edit(string $id): void
     {
+        $product = $this->productModel->getProduct($id);
         include '../views/edit.php';
     }
 
-    public function update(string $id): void
+    public function update(): void
     {
-        echo "edit: $id";
+        $id = $_POST['id'] ?? '';
+        $name = $_POST['name'] ?? '';
+        $description = $_POST['description'] ?? '';
+        $stock = (int)$_POST['stock'] ?? 0;
+        $price = (double)$_POST['price'] ?? 0.00;
+
+        $product = new Product();
+        $product->setId($id);
+        $product->setName($name);
+        $product->setDescription($description);
+        $product->setStock($stock);
+        $product->setPrice($price);
+
+        $product_result = $product->updateProduct();
+
+        if ($product_result) {
+            header('Location: /');
+            exit;
+        } else {
+            echo "Failed to add product.";
+        }
     }
 }
