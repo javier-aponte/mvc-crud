@@ -66,12 +66,13 @@ class Product
         $this->price = $price;
     }
 
-    public function getProducts(): array
+    public function findProducts(): ?array
     {
         $db = getDBConnection();
-        $result = $db->query(
-            "SELECT id, name, description, stock, price FROM products ORDER BY created_at DESC"
-        );
+
+        if (!$db) return null;
+
+        $result = $db->query("SELECT id, name, description, stock, price FROM products ORDER BY created_at DESC");
         $products = [];
 
         if ($result) {
@@ -79,30 +80,33 @@ class Product
                 $products[] = $row;
             }
             $result->free();
+            return $products;
         }
-        return $products;
+
+        return null;
     }
 
-    public function getProduct(string $uuid): ?array
+    public function findProduct(string $uuid): ?Product
     {
         $db = getDBConnection();
-        $stmt = $db->prepare(
-            "SELECT id, name, description, stock, price FROM products WHERE id = ?"
-        );
+
+        if (!$db) return null;
+
+        $stmt = $db->prepare("SELECT id, name, description, stock, price FROM products WHERE id = ?");
         $stmt->bind_param("s", $uuid);
 
         if ($stmt->execute()) {
             $result = $stmt->get_result();
-            //$product = new Product();
-            $product = $result->fetch_assoc();
+            $product = new Product();
+            //$product = $result->fetch_assoc();
 
-            /*while ($row = $result->fetch_assoc()) {
+            while ($row = $result->fetch_assoc()) {
                 $product->setId($row['id']);
                 $product->setName($row['name']);
                 $product->setDescription($row['description']);
                 $product->setStock($row['stock']);
                 $product->setPrice($row['price']);
-            }*/
+            }
 
             $stmt->close();
             return $product;
@@ -141,6 +145,23 @@ class Product
         $stmt->bind_param("ssiss", $this->name, $this->description, $this->stock, $this->price, $this->id);
         $result = $stmt->execute();
         $stmt->close();
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteProduct(): bool
+    {
+        $db = getDBConnection();
+        if (!$db) return false;
+
+        $stmt = $db->prepare("DELETE FROM products WHERE id = ?");
+        $stmt->bind_param("s", $this->id);
+        $result = $stmt->execute();
+
         if ($result) {
             return true;
         } else {

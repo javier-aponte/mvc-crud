@@ -33,12 +33,11 @@ switch ($request) {
             $controller->update();
         }
         break;
-    /* case (preg_match('/\/delete\/(\d+)/', $request, $matches) ? true : false):
-    $id = $matches[1];
-    if ($method == 'POST') {
-      $controller->delete($id);
-    }
-    break; */
+    case '/delete':
+        if ($method == 'POST') {
+            $controller->delete();
+        }
+        break;
     default:
         http_response_code(404);
         echo '404 - Página no encontrada';

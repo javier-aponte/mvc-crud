@@ -3,3 +3,4 @@ Dockerfile
 docker-compose.yml
 myapp.conf
 .DS_Store
+.idea

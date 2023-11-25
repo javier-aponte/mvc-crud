@@ -15,27 +15,27 @@
             <div class="card-body d-flex flex-column row-gap-2">
                 <input type="hidden"
                        name="id"
-                       value="<?= $product['id'] ?>">
+                       value="<?= $product->getId(); ?>">
                 <div>
                     <label for="name" class="form-label">Nombre</label>
 
                     <input name="name" id="name" type="text" class="form-control" aria-label="Nombre"
-                           value="<?= $product['name'] ?>" required>
+                           value="<?= $product->getName(); ?>" required>
                 </div>
                 <div>
                     <label for="description" class="form-label">Descripción</label>
                     <input name="description" id="description" type="text" class="form-control"
-                           aria-label="Descripción" value="<?= $product['description'] ?>" required>
+                           aria-label="Descripción" value="<?= $product->getDescription(); ?>" required>
                 </div>
                 <div>
                     <label for="stock" class="form-label">Stock</label>
                     <input name="stock" id="stock" type="text" class="form-control" aria-label="Stock"
-                           value="<?= $product['stock'] ?>" required>
+                           value="<?= $product->getStock(); ?>" required>
                 </div>
                 <div>
                     <label for="price" class="form-label">Precio</label>
                     <input name="price" id="price" type="text" class="form-control" aria-label="Precio"
-                           value="<?= $product['price'] ?>" required>
+                           value="<?= $product->getPrice(); ?>" required>
                 </div>
                 <div>
                     <label for="image" class="form-label">Imágen</label>
