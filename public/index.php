@@ -28,6 +28,12 @@ switch ($request) {
             $controller->update($uuid);
         }
         break;
+    case (bool)preg_match('/\/view\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})/', $request, $matches):
+        $uuid = $matches[1];
+        if ($method == 'GET') {
+            $controller->view($uuid);
+        }
+        break;
     case '/edit':
         if ($method == 'POST') {
             $controller->update();

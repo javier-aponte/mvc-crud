@@ -80,10 +80,9 @@ class Product
                 $products[] = $row;
             }
             $result->free();
-            return $products;
         }
 
-        return null;
+        return $products;
     }
 
     public function findProduct(string $uuid): ?Product
@@ -98,7 +97,6 @@ class Product
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             $product = new Product();
-            //$product = $result->fetch_assoc();
 
             while ($row = $result->fetch_assoc()) {
                 $product->setId($row['id']);

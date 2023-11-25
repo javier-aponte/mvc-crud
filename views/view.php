@@ -4,51 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <title>Editar Producto</title>
+    <title>Detalles de Producto</title>
 </head>
 <body class="bg-body-tertiary">
 <div class="container">
     <div class="card mt-3">
-        <div class="card-header fs-4">Editar Producto</div>
-        <?php if (!empty($product) && !empty($image)) : ?>
-        <form action="/edit" method="post" enctype="multipart/form-data">
+        <div class="card-header fs-4">Detalles del Producto</div>
+        <?php if (!empty($image) && !empty($product)) : ?>
+            <div class="d-flex justify-content-center">
+                <img src="/<?= $image->getPath() ?>" class="card-img-top" style="width: 400px; height: auto; "/>
+            </div>
             <div class="card-body d-flex flex-column row-gap-2">
                 <input type="hidden"
                        name="id"
                        value="<?= $product->getId(); ?>">
-                <input type="hidden"
-                       name="imageId"
-                       value="<?= $image->getId(); ?>">
                 <div>
                     <label for="name" class="form-label">Nombre</label>
 
                     <input name="name" id="name" type="text" class="form-control" aria-label="Nombre"
-                           value="<?= $product->getName(); ?>" required>
+                           value="<?= $product->getName(); ?>" disabled>
                 </div>
                 <div>
                     <label for="description" class="form-label">Descripción</label>
                     <input name="description" id="description" type="text" class="form-control"
-                           aria-label="Descripción" value="<?= $product->getDescription(); ?>" required>
+                           aria-label="Descripción" value="<?= $product->getDescription(); ?>" disabled>
                 </div>
                 <div>
                     <label for="stock" class="form-label">Stock</label>
                     <input name="stock" id="stock" type="text" class="form-control" aria-label="Stock"
-                           value="<?= $product->getStock(); ?>" required>
+                           value="<?= $product->getStock(); ?>" disabled>
                 </div>
                 <div>
                     <label for="price" class="form-label">Precio</label>
                     <input name="price" id="price" type="text" class="form-control" aria-label="Precio"
-                           value="<?= $product->getPrice(); ?>" required>
-                </div>
-                <div>
-                    <label for="image" class="form-label">Imágen</label>
-                    <input name="image" id="image" type="file" accept="image/*" class="form-control" aria-label="Imágen"
-                           required>
+                           value="<?= $product->getPrice(); ?>" disabled>
                 </div>
             </div>
-
             <div class="card-footer d-flex flex-column row-gap-1">
-                <button type="submit" class="btn btn-primary">
+                <a href="/edit/<?= $product->getId() ?>" type="submit" class="btn btn-success">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-floppy-fill me-1" viewBox="0 0 16 16">
                         <path
@@ -56,20 +49,19 @@
                         <path
                                 d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5V16Zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V0ZM9 1h2v4H9V1Z"/>
                     </svg>
-                    <span class="align-middle">GUARDAR</span>
-                </button>
-                <a href="/" class="btn btn-danger">
+                    <span class="align-middle">EDITAR</span>
+                </a>
+                <a href="/" class="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-x-circle-fill"
                          viewBox="0 0 16 16">
                         <path
                                 d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
                     </svg>
-                    <span class="align-middle">CANCELAR</span>
+                    <span class="align-middle">VOLVER</span>
                 </a>
             </div>
-        </form>
-        <?php endif ?>
+        <?php endif; ?>
     </div>
 </div>
 </body>

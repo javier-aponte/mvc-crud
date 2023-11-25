@@ -26,6 +26,13 @@ class ProductController
         include '../views/list.php';
     }
 
+    public function view($id): void
+    {
+        $product = $this->productModel->findProduct($id);
+        $image = $this->imageModel->findImage($id);
+        include '../views/view.php';
+    }
+
     public function create(): void
     {
         include '../views/create.php';
@@ -66,12 +73,14 @@ class ProductController
     public function edit(string $id): void
     {
         $product = $this->productModel->findProduct($id);
+        $image = $this->imageModel->findImage($id);
         include '../views/edit.php';
     }
 
     public function update(): void
     {
         $id = $_POST['id'] ?? '';
+        $imgId = $_POST['imageId'] ?? '';
         $name = $_POST['name'] ?? '';
         $description = $_POST['description'] ?? '';
         $stock = (int)$_POST['stock'] ?? 0;
@@ -86,7 +95,15 @@ class ProductController
 
         $product_result = $product->updateProduct();
 
-        if ($product_result) {
+        $image_data = $this->saveFile($_FILES['image']);
+        $image = new Image();
+        $image->setId($imgId);
+        $image->setPath($image_data[0]);
+        $image->setName($image_data[1]);
+
+        $image_result = $image->updateImage();
+
+        if ($product_result && $image_result) {
             header('Location: /');
             exit;
         } else {
